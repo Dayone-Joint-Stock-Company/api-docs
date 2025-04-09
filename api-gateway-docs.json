@@ -1,0 +1,904 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Merchant APIs",
+        "description": "Technical document APIs for Merchant APIs",
+        "contact": {
+            "email": "duong.vu@gotit.vn"
+        },
+        "version": "6.0"
+    },
+    "servers": [
+        {
+            "url": "https://openapi-stg.gotit.vn",
+            "description": "Merchant APIs Staging use open api domain"
+        }
+    ],
+    "paths": {
+        "/merchant/v6.0/checkmultiple": {
+            "post": {
+                "tags": [
+                    "GotItMerchant"
+                ],
+                "summary": "Check multiple vouchers are valid or not",
+                "description": "Check multiple vouchers are valid or not",
+                "operationId": "checkMultiple",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RequestCheckMultipleBodySchema"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Request was received and processed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseCheckMultipleSchema"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Unexpected error"
+                    }
+                }
+            }
+        },
+        "/merchant/v6.0/reserved": {
+            "post": {
+                "tags": [
+                    "GotItMerchant"
+                ],
+                "summary": "Reserved multiple vouchers for a fixed bill number.",
+                "description": "Reserved multiple vouchers for a fixed bill number.",
+                "operationId": "reserved",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RequestReservedBodySchema"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Request was received and processed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseReservedSchema"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Unexpected error"
+                    }
+                }
+            }
+        },
+        "/merchant/v6.0/unreserved": {
+            "post": {
+                "tags": [
+                    "GotItMerchant"
+                ],
+                "summary": "Reserved multiple vouchers for a fixed bill number.",
+                "description": "Reserved multiple vouchers for a fixed bill number.",
+                "operationId": "unreserved",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RequestUnReservedBodySchema"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Request was received and processed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseUnReservedSchema"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Unexpected error"
+                    }
+                }
+            }
+        },
+        "/merchant/v6.0/usemultiple": {
+            "post": {
+                "tags": [
+                    "GotItMerchant"
+                ],
+                "summary": "Reserved multiple vouchers for a fixed bill number.",
+                "description": "Reserved multiple vouchers for a fixed bill number.",
+                "operationId": "useMultiple",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RequestMarkUseMultipleBodySchema"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Request was received and processed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseMarkUseMultipleSchema"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Unexpected error"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "RequestCheckMultipleBodySchema": {
+                "properties": {
+                    "pin": {
+                        "description": "Store pin",
+                        "type": "string",
+                        "example": "1212"
+                    },
+                    "codes": {
+                        "description": "Array of 10-16 characters Got It voucher codes",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "example": [
+                            "070898022379",
+                            "7132616187"
+                        ]
+                    },
+                    "bill_number": {
+                        "description": "Bill number will apply vouchers",
+                        "type": "string",
+                        "example": "BILL001"
+                    },
+                    "total_bill": {
+                        "description": "Total bill amount",
+                        "type": "integer",
+                        "example": "1000000"
+                    },
+                    "skip_reserved_when_mark_used": {
+                        "description": "When true the system will execute the flow without reserve",
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "skus_info": {
+                        "description": "SKU information in bill_number",
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "sku": {
+                                    "description": "SKU code",
+                                    "type": "string",
+                                    "example": "SKU001"
+                                },
+                                "quantity": {
+                                    "description": "Quantity of SKU. Default = 1",
+                                    "type": "integer",
+                                    "example": 1
+                                },
+                                "price": {
+                                    "description": "Price of SKU in bill",
+                                    "type": "integer",
+                                    "example": 100000
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "example": [
+                            {
+                                "sku": "SKU001",
+                                "quantity": 1,
+                                "price": 100000
+                            },
+                            {
+                                "sku": "SKU002",
+                                "quantity": 2,
+                                "price": 200000
+                            }
+                        ]
+                    }
+                },
+                "type": "object"
+            },
+            "RequestMarkUseMultipleBodySchema": {
+                "properties": {
+                    "pin": {
+                        "description": "Store pin",
+                        "type": "string",
+                        "example": "1212"
+                    },
+                    "codes": {
+                        "description": "Array of 10-16 characters Got It voucher codes",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "example": [
+                            "070898022379",
+                            "7132616187"
+                        ]
+                    },
+                    "bill_number": {
+                        "description": "Bill number will apply vouchers",
+                        "type": "string",
+                        "example": "BILL001"
+                    },
+                    "total_bill": {
+                        "description": "Total bill amount",
+                        "type": "integer",
+                        "example": "1000000"
+                    },
+                    "skip_reserved_when_mark_used": {
+                        "description": "When true the system will execute the flow without reserve",
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "skus_info": {
+                        "description": "SKU information in bill_number",
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "sku": {
+                                    "description": "SKU code",
+                                    "type": "string",
+                                    "example": "SKU001"
+                                },
+                                "quantity": {
+                                    "description": "Quantity of SKU. Default = 1",
+                                    "type": "integer",
+                                    "example": 1
+                                },
+                                "price": {
+                                    "description": "Price of SKU in bill",
+                                    "type": "integer",
+                                    "example": 100000
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "example": [
+                            {
+                                "sku": "SKU001",
+                                "quantity": 1,
+                                "price": 100000
+                            },
+                            {
+                                "sku": "SKU002",
+                                "quantity": 2,
+                                "price": 200000
+                            }
+                        ]
+                    }
+                },
+                "type": "object"
+            },
+            "RequestReservedBodySchema": {
+                "properties": {
+                    "pin": {
+                        "description": "Store pin",
+                        "type": "string",
+                        "example": "1212"
+                    },
+                    "codes": {
+                        "description": "Array of 10-16 characters Got It voucher codes",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "example": [
+                            "070898022379",
+                            "7132616187"
+                        ]
+                    },
+                    "bill_number": {
+                        "description": "Bill number will apply vouchers",
+                        "type": "string",
+                        "example": "BILL001"
+                    },
+                    "total_bill": {
+                        "description": "Total bill amount",
+                        "type": "integer",
+                        "example": "1000000"
+                    },
+                    "bill_created_at": {
+                        "description": "Bill creation time. Format: YYYY-MM-DD HH:MM:SS",
+                        "type": "string",
+                        "example": "2024-12-12 12:00:00"
+                    },
+                    "skus_info": {
+                        "description": "SKU information in bill_number",
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "sku": {
+                                    "description": "SKU code",
+                                    "type": "string",
+                                    "example": "SKU001"
+                                },
+                                "quantity": {
+                                    "description": "Quantity of SKU. Default = 1",
+                                    "type": "integer",
+                                    "example": 1
+                                },
+                                "price": {
+                                    "description": "Price of SKU in bill",
+                                    "type": "integer",
+                                    "example": 100000
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "example": [
+                            {
+                                "sku": "SKU001",
+                                "quantity": 1,
+                                "price": 100000
+                            },
+                            {
+                                "sku": "SKU002",
+                                "quantity": 2,
+                                "price": 200000
+                            }
+                        ]
+                    }
+                },
+                "type": "object"
+            },
+            "RequestUnReservedBodySchema": {
+                "properties": {
+                    "pin": {
+                        "description": "Store pin",
+                        "type": "string",
+                        "example": "1212"
+                    },
+                    "codes": {
+                        "description": "Array of 10-16 characters Got It voucher codes",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "example": [
+                            "070898022379",
+                            "7132616187"
+                        ]
+                    },
+                    "bill_number": {
+                        "description": "Bill number will apply vouchers",
+                        "type": "string",
+                        "example": "BILL001"
+                    },
+                    "bill_created_at": {
+                        "description": "Bill creation time. Format: YYYY-MM-DD HH:MM:SS",
+                        "type": "string",
+                        "example": "2024-12-12 12:00:00"
+                    }
+                },
+                "type": "object"
+            },
+            "ResponseCheckMultipleSchema": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "return_code": {
+                        "description": "Result code if failed. In case of successful request: value is null",
+                        "type": "string",
+                        "example": null,
+                        "nullable": true
+                    },
+                    "message_en": {
+                        "description": "Message notification in English",
+                        "type": "string",
+                        "example": "Valid voucher"
+                    },
+                    "message_vi": {
+                        "description": "Message notification in Vietnamese",
+                        "type": "string",
+                        "example": "Voucher hợp lệ"
+                    },
+                    "data": {
+                        "description": "Detail items of voucher, if result is failed, response will return the first voucher code which is invalid",
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "code": {
+                                    "description": "Voucher code",
+                                    "type": "string",
+                                    "example": "070898022379"
+                                },
+                                "value": {
+                                    "description": "Value of voucher",
+                                    "type": "integer",
+                                    "example": 100000,
+                                    "nullable": true
+                                },
+                                "state": {
+                                    "description": "State of voucher",
+                                    "type": "integer",
+                                    "example": 1,
+                                    "nullable": true
+                                },
+                                "voucher_type": {
+                                    "description": "Voucher type, standard or conditional",
+                                    "type": "string",
+                                    "example": "conditional"
+                                },
+                                "expiry_date": {
+                                    "description": "Expiry date of voucher (YYYY-MM-DD)",
+                                    "type": "string",
+                                    "example": "2025-12-26"
+                                },
+                                "cancel_date": {
+                                    "description": "Date cancel voucher (YYYY-MM-DD)",
+                                    "type": "string",
+                                    "example": ""
+                                },
+                                "conditions": {
+                                    "description": "Include information involve with voucher type is conditional",
+                                    "properties": {
+                                        "start_date": {
+                                            "description": "Promo start date (YYYY-MM-DD)",
+                                            "type": "string",
+                                            "example": "2025-01-10"
+                                        },
+                                        "exclude_specific_date": {
+                                            "description": "Promo non-effective dates (YYYY-MM-DD)",
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string",
+                                                "example": "2025-01-01"
+                                            }
+                                        },
+                                        "exclude_recurring_day": {
+                                            "description": "Promo non-effective day of week",
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string",
+                                                "example": "Tuesday"
+                                            }
+                                        },
+                                        "redeemable_skus": {
+                                            "description": "List of redeemable SKUs of the voucher code. For voucher type = conditional, bill number must contain at least 1 redeemable SKU of the voucher.",
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string",
+                                                "example": "SKU001"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                "redemptions": {
+                                    "description": "Include information related to the use of the voucher (all types)",
+                                    "properties": {
+                                        "redeem_sku_codes": {
+                                            "description": "Contains redeemed SKU information of the voucher (for voucher type is conditional and support sku)",
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "sku": {
+                                                        "description": "SKU code is redeemed for voucher",
+                                                        "type": "string",
+                                                        "example": "SKU001"
+                                                    },
+                                                    "quantity": {
+                                                        "description": "SKU quantity is redeemed for voucher",
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "price": {
+                                                        "description": "Selling price of SKU in bill.",
+                                                        "type": "integer",
+                                                        "example": 100000
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "redemption_value": {
+                                            "description": "Actual redemption value of voucher type = conditional",
+                                            "type": "integer",
+                                            "example": 10000
+                                        },
+                                        "used_store": {
+                                            "properties": {
+                                                "name_vi": {
+                                                    "description": "Store name in Vietnamese",
+                                                    "type": "string",
+                                                    "example": "Store Hồ Chí Minh"
+                                                },
+                                                "name_en": {
+                                                    "description": "Store name in English",
+                                                    "type": "string",
+                                                    "example": "Store HCM"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "used_date": {
+                                            "description": "Date voucher marked as used in case the voucher has been redeemed. Format (YYYY-MM-DD HH:MM:SS)",
+                                            "type": "string",
+                                            "example": "2025-01-10 12:00:00"
+                                        },
+                                        "bill_number": {
+                                            "description": "Bill number for which voucher used/reserved",
+                                            "type": "string",
+                                            "example": "BILL001"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "ResponseMarkUseMultipleSchema": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "return_code": {
+                        "description": "Result code if failed. In case of successful request: value is null",
+                        "type": "string",
+                        "example": null,
+                        "nullable": true
+                    },
+                    "message_en": {
+                        "description": "Message notification in English",
+                        "type": "string",
+                        "example": "Valid voucher"
+                    },
+                    "message_vi": {
+                        "description": "Message notification in Vietnamese",
+                        "type": "string",
+                        "example": "Voucher hợp lệ"
+                    },
+                    "data": {
+                        "description": "Detail items of voucher, if result is failed, response will return the first voucher code which is invalid",
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "code": {
+                                    "description": "Voucher code",
+                                    "type": "string",
+                                    "example": "070898022379"
+                                },
+                                "value": {
+                                    "description": "Value of voucher",
+                                    "type": "integer",
+                                    "example": 100000,
+                                    "nullable": true
+                                },
+                                "state": {
+                                    "description": "State of voucher",
+                                    "type": "integer",
+                                    "example": 4,
+                                    "nullable": true
+                                },
+                                "voucher_type": {
+                                    "description": "Voucher type, standard or conditional",
+                                    "type": "string",
+                                    "example": "conditional"
+                                },
+                                "conditions": {
+                                    "description": "Include information involve with voucher type is conditional",
+                                    "properties": {
+                                        "redeemable_skus": {
+                                            "description": "List of redeemable SKUs of the voucher code. For voucher type = conditional, bill number must contain at least 1 redeemable SKU of the voucher.",
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string",
+                                                "example": "SKU001"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                "redemptions": {
+                                    "description": "Include information related to the use of the voucher (all types)",
+                                    "properties": {
+                                        "redeem_sku_codes": {
+                                            "description": "Contains redeemed SKU information of the voucher (for voucher type is conditional and support sku)",
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "sku": {
+                                                        "description": "SKU code is redeemed for voucher",
+                                                        "type": "string",
+                                                        "example": "SKU001"
+                                                    },
+                                                    "quantity": {
+                                                        "description": "SKU quantity is redeemed for voucher",
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "price": {
+                                                        "description": "Selling price of SKU in bill.",
+                                                        "type": "integer",
+                                                        "example": 100000
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "redemption_value": {
+                                            "description": "Actual redemption value of voucher type = conditional",
+                                            "type": "integer",
+                                            "example": 10000
+                                        },
+                                        "used_store": {
+                                            "properties": {
+                                                "name_vi": {
+                                                    "description": "Store name in Vietnamese",
+                                                    "type": "string",
+                                                    "example": "Store Hồ Chí Minh"
+                                                },
+                                                "name_en": {
+                                                    "description": "Store name in English",
+                                                    "type": "string",
+                                                    "example": "Store HCM"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "used_date": {
+                                            "description": "Date voucher marked as used in case the voucher has been redeemed. Format (YYYY-MM-DD HH:MM:SS)",
+                                            "type": "string",
+                                            "example": "2025-01-10 12:00:00"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "transaction_id": {
+                        "description": "Transaction ID (if mark used successfully)",
+                        "type": "string",
+                        "example": "2978_20230308135416027074"
+                    },
+                    "bill_number": {
+                        "description": "Bill number that vouchers were marked as used for.",
+                        "type": "string",
+                        "example": "BILL001"
+                    }
+                },
+                "type": "object"
+            },
+            "ResponseReservedSchema": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "return_code": {
+                        "description": "Result code if failed. In case of successful request: value is null",
+                        "type": "string",
+                        "example": null,
+                        "nullable": true
+                    },
+                    "message_en": {
+                        "description": "Message notification in English",
+                        "type": "string",
+                        "example": "Valid voucher"
+                    },
+                    "message_vi": {
+                        "description": "Message notification in Vietnamese",
+                        "type": "string",
+                        "example": "Voucher hợp lệ"
+                    },
+                    "used_store": {
+                        "description": "Store marked voucher used/reserved",
+                        "properties": {
+                            "name_vi": {
+                                "description": "Store name in Vietnamese",
+                                "type": "string",
+                                "example": "Store HCM"
+                            },
+                            "name_en": {
+                                "description": "Store name in English",
+                                "type": "string",
+                                "example": "Store Hồ Chí Minh"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "bill_number": {
+                        "description": "Bill number",
+                        "type": "string",
+                        "example": "BILL001"
+                    },
+                    "data": {
+                        "description": "Detail items of voucher, if result is failed, response will return the first voucher code which is invalid",
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "code": {
+                                    "description": "Voucher code",
+                                    "type": "string",
+                                    "example": "070898022379"
+                                },
+                                "value": {
+                                    "description": "Value of voucher",
+                                    "type": "integer",
+                                    "example": 100000,
+                                    "nullable": true
+                                },
+                                "state": {
+                                    "description": "State of voucher",
+                                    "type": "integer",
+                                    "example": 1,
+                                    "nullable": true
+                                },
+                                "voucher_type": {
+                                    "description": "Voucher type, standard or conditional",
+                                    "type": "string",
+                                    "example": "conditional"
+                                },
+                                "conditions": {
+                                    "description": "Include information involve with voucher type is conditional",
+                                    "properties": {
+                                        "redeemable_skus": {
+                                            "description": "List of redeemable SKUs of the voucher code. For voucher type = conditional, bill number must contain at least 1 redeemable SKU of the voucher.",
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string",
+                                                "example": "SKU001"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                "redemptions": {
+                                    "description": "Include information related to the use of the voucher (all types)",
+                                    "properties": {
+                                        "redeem_sku_codes": {
+                                            "description": "Contains redeemed SKU information of the voucher (for voucher type is conditional and support sku)",
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "sku": {
+                                                        "description": "SKU code is redeemed for voucher",
+                                                        "type": "string",
+                                                        "example": "SKU001"
+                                                    },
+                                                    "quantity": {
+                                                        "description": "SKU quantity is redeemed for voucher",
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "price": {
+                                                        "description": "Selling price of SKU in bill.",
+                                                        "type": "integer",
+                                                        "example": 100000
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "redemption_value": {
+                                            "description": "Actual redemption value of voucher type = conditional",
+                                            "type": "integer",
+                                            "example": 10000
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "ResponseUnReservedSchema": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "return_code": {
+                        "description": "Result code if failed. In case of successful request: value is null",
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "message_en": {
+                        "description": "Message notification in English",
+                        "type": "string",
+                        "example": "Valid voucher"
+                    },
+                    "message_vi": {
+                        "description": "Message notification in Vietnamese",
+                        "type": "string",
+                        "example": "Voucher hợp lệ"
+                    },
+                    "used_store": {
+                        "description": "Store marked voucher used/reserved",
+                        "properties": {
+                            "name_vi": {
+                                "description": "Store name in Vietnamese",
+                                "type": "string",
+                                "example": "Store HCM"
+                            },
+                            "name_en": {
+                                "description": "Store name in English",
+                                "type": "string",
+                                "example": "Store Hồ Chí Minh"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "bill_number": {
+                        "description": "Bill number",
+                        "type": "string",
+                        "example": "BILL001"
+                    },
+                    "data": {
+                        "description": "Detail items of voucher, if result is failed, response will return the first voucher code which is invalid",
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "code": {
+                                    "description": "Voucher code",
+                                    "type": "string",
+                                    "example": "070898022379"
+                                },
+                                "value": {
+                                    "description": "Value of voucher",
+                                    "type": "integer",
+                                    "example": 100000,
+                                    "nullable": true
+                                },
+                                "voucher_type": {
+                                    "description": "Voucher type, standard or conditional",
+                                    "type": "string",
+                                    "example": "conditional"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "GotItMerchant",
+            "description": "GotItMerchant"
+        }
+    ]
+}
